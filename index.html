@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ma Piano</title>
+<meta name="description" content="Apprendre le piano : l'appli écoute ton piano et te dit si tu joues juste. Parcours progressif, exercices et morceaux connus.">
+<meta name="theme-color" content="#f3f4fb">
+<link rel="manifest" href="manifest.webmanifest" data-pwa>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" data-pwa>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Piano">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22mp-fond%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2360a5fa%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237c3aed%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22mp-touche%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23e7e9f8%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22mp-noire%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%233b3f63%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231d2036%22%2F%3E%3C%2FlinearGradient%3E%3CclipPath%20id%3D%22mp-forme%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22116%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22116%22%20fill%3D%22url(%23mp-fond)%22%2F%3E%3Ccircle%20cx%3D%22420%22%20cy%3D%2270%22%20r%3D%22230%22%20fill%3D%22%23fff%22%20opacity%3D%22.14%22%20clip-path%3D%22url(%23mp-forme)%22%2F%3E%3Crect%20x%3D%2282%22%20y%3D%22196%22%20width%3D%22348%22%20height%3D%22250%22%20rx%3D%2234%22%20fill%3D%22%232a0f6b%22%20opacity%3D%22.28%22%2F%3E%3Crect%20x%3D%2272%22%20y%3D%22176%22%20width%3D%22368%22%20height%3D%22250%22%20rx%3D%2234%22%20fill%3D%22url(%23mp-touche)%22%2F%3E%3Cg%20stroke%3D%22%23c9cce6%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%3E%3Cline%20x1%3D%22133%22%20y1%3D%22300%22%20x2%3D%22133%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22195%22%20y1%3D%22300%22%20x2%3D%22195%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22256%22%20y1%3D%22300%22%20x2%3D%22256%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22317%22%20y1%3D%22300%22%20x2%3D%22317%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22379%22%20y1%3D%22300%22%20x2%3D%22379%22%20y2%3D%22420%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22url(%23mp-noire)%22%3E%3Crect%20x%3D%22113%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3Crect%20x%3D%22175%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3Crect%20x%3D%22297%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3Crect%20x%3D%22359%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23fff%22%3E%3Cellipse%20cx%3D%22184%22%20cy%3D%22120%22%20rx%3D%2230%22%20ry%3D%2222%22%20transform%3D%22rotate(-20%20184%20120)%22%2F%3E%3Crect%20x%3D%22206%22%20y%3D%2244%22%20width%3D%2212%22%20height%3D%2282%22%20rx%3D%226%22%2F%3E%3Cpath%20d%3D%22M206%2044c6%2026%2040%2032%2052%2066-18-12-34-14-52-14z%22%2F%3E%3C%2Fg%3E%3Crect%20x%3D%22197%22%20y%3D%22326%22%20width%3D%2256%22%20height%3D%2296%22%20rx%3D%2214%22%20fill%3D%22%23fff%22%20opacity%3D%220%22%2F%3E%3C%2Fsvg%3E">
+</head>
+<body>
+
+<!-- Pictogrammes (un seul jeu de symboles, réutilisé partout) -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-retour" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-maison" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7M6.5 9.5V20h11V9.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-prec" viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-suiv" viewBox="0 0 24 24"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-aide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .9-1 1.6v.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-reglages" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="15" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-metronome" viewBox="0 0 24 24"><path d="M8.5 3.5h7L19 21H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 16l5-8.5M7 16h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-reinit" viewBox="0 0 24 24"><path d="M5 12a7 7 0 1 0 2.1-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M4.5 3.5V8H9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 4.8v14.4c0 .8.9 1.3 1.6.8l11-7.2c.6-.4.6-1.2 0-1.6l-11-7.2c-.7-.5-1.6 0-1.6.8z" fill="currentColor"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></symbol>
+  <symbol id="i-installer" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-fermer" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-flamme" viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.8 7-6.8 0-4.3-3.6-6.3-4.3-10.2-2.4 1.6-3.5 4-3.2 6.6-1.2-.6-2-1.8-2.2-3.2C7.2 10 5 12.3 5 15.2 5 19.2 8 22 12 22z" fill="currentColor"/></symbol>
+  <symbol id="i-drapeau" viewBox="0 0 24 24"><path d="M6 21V4h11.5l-2.8 4.2 2.8 4.3H6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-coche" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-micro" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-ecouter" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-pas" viewBox="0 0 24 24"><path d="M5 17V8l5 4-5 5zM14 7v10M19 7v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-piano" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 5v14M15 5v14" stroke="currentColor" stroke-width="1.6"/><rect x="7.2" y="5" width="3.2" height="8" rx=".8" fill="currentColor"/><rect x="13.6" y="5" width="3.2" height="8" rx=".8" fill="currentColor"/></symbol>
+</svg>
+
+<!-- Toute l'appli : si le téléphone est tenu droit, ce conteneur pivote d'un quart de tour -->
+<div id="appli">
+
+<!-- ================= Accueil ================= -->
+<section class="ecran" id="ecran-accueil" aria-labelledby="titre-accueil">
+  <header class="entete">
+    <div class="marque">
+      <span class="logo" aria-hidden="true">
+        <!-- logo --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="mp-fond" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#7c3aed"/></linearGradient><linearGradient id="mp-touche" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e7e9f8"/></linearGradient><linearGradient id="mp-noire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3f63"/><stop offset="1" stop-color="#1d2036"/></linearGradient><clipPath id="mp-forme"><rect width="512" height="512" rx="116"/></clipPath></defs><rect width="512" height="512" rx="116" fill="url(#mp-fond)"/><circle cx="420" cy="70" r="230" fill="#fff" opacity=".14" clip-path="url(#mp-forme)"/><rect x="82" y="196" width="348" height="250" rx="34" fill="#2a0f6b" opacity=".28"/><rect x="72" y="176" width="368" height="250" rx="34" fill="url(#mp-touche)"/><g stroke="#c9cce6" stroke-width="5" stroke-linecap="round"><line x1="133" y1="300" x2="133" y2="420"/><line x1="195" y1="300" x2="195" y2="420"/><line x1="256" y1="300" x2="256" y2="420"/><line x1="317" y1="300" x2="317" y2="420"/><line x1="379" y1="300" x2="379" y2="420"/></g><g fill="url(#mp-noire)"><rect x="113" y="176" width="40" height="150" rx="10"/><rect x="175" y="176" width="40" height="150" rx="10"/><rect x="297" y="176" width="40" height="150" rx="10"/><rect x="359" y="176" width="40" height="150" rx="10"/></g><g fill="#fff"><ellipse cx="184" cy="120" rx="30" ry="22" transform="rotate(-20 184 120)"/><rect x="206" y="44" width="12" height="82" rx="6"/><path d="M206 44c6 26 40 32 52 66-18-12-34-14-52-14z"/></g><rect x="197" y="326" width="56" height="96" rx="14" fill="#fff" opacity="0"/></svg><!-- /logo -->
+      </span>
+      <h1 id="titre-accueil" class="mot">Ma Piano</h1>
+      <span class="version" id="version"></span>
+    </div>
+    <div class="entete-droite">
+      <a class="pastille-stat a-travailler" href="#/progression" id="pastille-travail" hidden>
+        <svg class="ico" aria-hidden="true"><use href="#i-drapeau"/></svg><span><b id="travail-n">0</b><span class="pt-lbl"> à travailler</span></span>
+      </a>
+      <a class="pastille-stat reprendre" href="#/" id="reprendre" hidden>
+        <svg class="ico" aria-hidden="true"><use href="#i-play"/></svg><span id="reprendre-texte"></span>
+      </a>
+      <a class="pastille-stat" href="#/progression" id="stat-jour" title="Ma progression">
+        <svg class="ico" aria-hidden="true"><use href="#i-flamme"/></svg><span id="streak-text">0 min</span>
+      </a>
+      <button class="btn-plat" id="btn-installer" type="button" hidden>
+        <svg class="ico" aria-hidden="true"><use href="#i-installer"/></svg>Installer
+      </button>
+    </div>
+  </header>
+
+  <div class="accueil-grille">
+    <div class="carte-cat grande c-parcours">
+      <div class="cat-illus" id="illus-parcours"></div>
+      <div class="cat-texte">
+        <h2><a href="#/parcours" class="carte-lien">Parcours</a></h2>
+        <p id="parcours-resume">Apprends pas à pas, du premier Do au niveau avancé.</p>
+        <div class="jauge fine" aria-hidden="true"><i id="parcours-jauge"></i></div>
+      </div>
+      <a class="cta" id="cta-continuer" href="#/parcours">
+        <svg class="ico" aria-hidden="true"><use href="#i-play"/></svg><span id="cta-texte">Commencer</span>
+      </a>
+    </div>
+    <a class="carte-cat c-morceaux" href="#/morceaux">
+      <div class="cat-illus" id="illus-morceaux"></div>
+      <div class="cat-texte"><h2>Morceaux</h2><p id="compte-morceaux"></p></div>
+    </a>
+    <a class="carte-cat c-exercices" href="#/exercices">
+      <div class="cat-illus" id="illus-exercices"></div>
+      <div class="cat-texte"><h2>Exercices</h2><p id="compte-exercices"></p></div>
+    </a>
+    <a class="carte-cat c-libre" href="#/libre">
+      <div class="cat-illus" id="illus-libre"></div>
+      <div class="cat-texte"><h2>Mon micro</h2><p>Joue n'importe quoi : l'appli dit quelles notes elle entend.</p></div>
+    </a>
+    <a class="carte-cat c-progression" href="#/progression">
+      <div class="cat-illus" id="illus-progression"></div>
+      <div class="cat-texte"><h2>Progression</h2><p id="compte-progression"></p></div>
+    </a>
+  </div>
+</section>
+
+<!-- ================= Listes (catégories, niveaux, familles) ================= -->
+<section class="ecran" id="ecran-liste" hidden aria-labelledby="liste-titre">
+  <header class="entete">
+    <a class="rond" id="liste-retour" href="#/" aria-label="Retour">
+      <svg class="ico" aria-hidden="true"><use href="#i-retour"/></svg>
+    </a>
+    <div class="entete-titres">
+      <p class="surtitre" id="liste-sur"></p>
+      <h1 id="liste-titre"></h1>
+    </div>
+    <div class="entete-droite">
+      <div class="sauts" id="liste-sauts" role="group" aria-label="Aller au niveau"></div>
+      <a class="rond" href="#/" aria-label="Accueil"><svg class="ico" aria-hidden="true"><use href="#i-maison"/></svg></a>
+    </div>
+  </header>
+  <div class="liste-corps" id="liste-corps"></div>
+</section>
+
+<!-- ================= Mon micro : ce que l'appli entend ================= -->
+<section class="ecran ecran-libre" id="ecran-libre" hidden aria-labelledby="libre-titre">
+  <header class="entete">
+    <a class="rond" href="#/" aria-label="Retour"><svg class="ico" aria-hidden="true"><use href="#i-retour"/></svg></a>
+    <div class="entete-titres">
+      <p class="surtitre">Test de l'écoute</p>
+      <h1 id="libre-titre">Mon micro</h1>
+    </div>
+    <div class="entete-droite">
+      <a class="rond" href="#/" aria-label="Accueil"><svg class="ico" aria-hidden="true"><use href="#i-maison"/></svg></a>
+    </div>
+  </header>
+  <div class="libre-corps">
+    <div class="libre-gauche">
+      <button class="btn-plat accent gros" id="libre-micro" type="button">
+        <svg class="ico" aria-hidden="true"><use href="#i-micro"/></svg><span>Activer le micro</span>
+      </button>
+      <div class="libre-note" id="libre-note" aria-live="polite">—</div>
+      <div class="libre-sous" id="libre-sous">Pose le téléphone près du piano, puis joue une note.</div>
+      <div class="niveau-micro" aria-hidden="true"><i id="libre-niveau"></i></div>
+      <label class="libre-sens">Sensibilité
+        <input type="range" id="libre-sens" min="0.6" max="1.8" step="0.05" value="1" aria-label="Sensibilité du micro">
+        <span id="libre-sens-val">normale</span>
+      </label>
+    </div>
+    <div class="libre-droite">
+      <div id="libre-clavier"></div>
+      <p class="muted small">Les touches s'allument quand l'appli entend la note. Astuce : pose le téléphone sur le pupitre, l'écran vers toi.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Lecteur ================= -->
+<section class="ecran ecran-jouer" id="ecran-jouer" hidden aria-labelledby="j-titre">
+  <header class="barre-jeu">
+    <a class="rond" id="j-retour" href="#/" aria-label="Retour à la liste">
+      <svg class="ico" aria-hidden="true"><use href="#i-retour"/></svg>
+    </a>
+    <div class="j-nav">
+      <a class="rond petit" id="j-prec" href="#/" aria-label="Précédent"><svg class="ico" aria-hidden="true"><use href="#i-prec"/></svg></a>
+      <div class="j-titres">
+        <p class="surtitre" id="j-sur"></p>
+        <h1 id="j-titre"></h1>
+      </div>
+      <a class="rond petit" id="j-suiv" href="#/" aria-label="Suivant"><svg class="ico" aria-hidden="true"><use href="#i-suiv"/></svg></a>
+    </div>
+    <div class="j-droite">
+      <div class="statut-seg" role="group" aria-label="Où j'en suis">
+        <button class="statut-btn travail" id="st-travail" type="button" aria-pressed="false" title="À travailler">
+          <svg class="ico" aria-hidden="true"><use href="#i-drapeau"/></svg><span>À travailler</span>
+        </button>
+        <button class="statut-btn acquis" id="st-acquis" type="button" aria-pressed="false" title="Acquis">
+          <svg class="ico" aria-hidden="true"><use href="#i-coche"/></svg><span>Acquis</span>
+        </button>
+      </div>
+      <button class="rond" id="j-aide" type="button" aria-label="Explications" aria-haspopup="dialog">
+        <svg class="ico" aria-hidden="true"><use href="#i-aide"/></svg>
+      </button>
+      <button class="rond" id="j-reglages" type="button" aria-label="Réglages" aria-haspopup="dialog">
+        <svg class="ico" aria-hidden="true"><use href="#i-reglages"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="sections-bar" id="sections-bar" hidden></div>
+
+  <main class="zone-jeu">
+    <div class="papier" id="papier">
+      <div class="score-zone" id="score-zone"></div>
+      <div class="retour-jeu" id="retour-jeu" hidden aria-live="polite"></div>
+      <div class="count-overlay" id="count-overlay" hidden aria-live="assertive"><span></span></div>
+      <div class="bilan" id="bilan" hidden>
+        <div class="bilan-boite">
+          <div class="bilan-etoiles" id="bilan-etoiles" aria-hidden="true"></div>
+          <h2 id="bilan-titre">Bravo !</h2>
+          <p id="bilan-texte"></p>
+          <div class="rang-boutons">
+            <button class="btn-plat" id="bilan-encore" type="button">Recommencer</button>
+            <a class="btn-plat accent" id="bilan-suite" href="#/">Suivant</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="zone-clavier" id="zone-clavier"></div>
+  </main>
+
+  <footer class="barre-transport">
+    <div class="seg modes" id="modes" role="group" aria-label="Façon de jouer">
+      <button class="seg-btn actif" data-mode="attente" type="button" aria-pressed="true" title="L'appli attend que tu joues chaque note">
+        <svg class="ico" aria-hidden="true"><use href="#i-pas"/></svg><span>Pas à pas</span>
+      </button>
+      <button class="seg-btn" data-mode="tempo" type="button" aria-pressed="false" title="Avec le métronome : chaque note au bon moment">
+        <svg class="ico" aria-hidden="true"><use href="#i-metronome"/></svg><span>À tempo</span>
+      </button>
+      <button class="seg-btn" data-mode="demo" type="button" aria-pressed="false" title="Écouter le morceau">
+        <svg class="ico" aria-hidden="true"><use href="#i-ecouter"/></svg><span>Écouter</span>
+      </button>
+    </div>
+    <button class="bascule micro" id="btn-micro" type="button" aria-pressed="false" aria-label="Micro" title="Écoute de ton piano">
+      <svg class="ico" aria-hidden="true"><use href="#i-micro"/></svg><span id="micro-etat">Micro</span>
+    </button>
+    <div class="t-tempo" id="t-tempo" role="group" aria-label="Tempo">
+      <button class="rond petit" id="tempo-moins" type="button" aria-label="Ralentir">−</button>
+      <div class="bpm-aff"><output id="bpm-val" for="bpm">80</output><span>BPM</span></div>
+      <button class="rond petit" id="tempo-plus" type="button" aria-label="Accélérer">+</button>
+      <input type="range" id="bpm" min="30" max="200" value="80" aria-label="Tempo en battements par minute">
+      <button class="rond petit" id="tempo-reset" type="button" aria-label="Revenir au tempo conseillé" title="Tempo conseillé">
+        <svg class="ico" aria-hidden="true"><use href="#i-reinit"/></svg>
+      </button>
+    </div>
+    <button class="lecture" id="btn-play" type="button" aria-label="Commencer">
+      <svg class="ico" aria-hidden="true"><use id="play-ico" href="#i-play"/></svg>
+    </button>
+  </footer>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="voile" id="voile" hidden></div>
+
+<!-- ================= Volet : explications ================= -->
+<aside class="volet" id="volet-aide" hidden role="dialog" aria-modal="true" aria-labelledby="aide-titre">
+  <header class="volet-tete">
+    <h2 id="aide-titre">Explications</h2>
+    <button class="rond petit" type="button" data-fermer aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-fermer"/></svg></button>
+  </header>
+  <div class="volet-corps">
+    <div id="aide-corps" class="texte"></div>
+    <h3>Comment ça marche</h3>
+    <div class="texte">
+      <ul>
+        <li><b>Pas à pas</b> : joue la ou les notes en couleur. L'appli t'écoute et passe à la suite quand c'est juste.</li>
+        <li><b>À tempo</b> : le métronome bat, la partition avance, chaque note doit tomber au bon moment. Un score à la fin.</li>
+        <li><b>Écouter</b> : l'appli joue le morceau pour que tu l'entendes d'abord.</li>
+        <li>Les couleurs : <span class="pastille-main d">main droite</span> <span class="pastille-main g">main gauche</span>. Le chiffre sur la note ou la touche est le doigt (1 = pouce).</li>
+        <li>Pas de micro ? Joue sur les touches de l'écran.</li>
+      </ul>
+    </div>
+  </div>
+</aside>
+
+<!-- ================= Volet : réglages ================= -->
+<aside class="volet" id="volet-reglages" hidden role="dialog" aria-modal="true" aria-labelledby="reglages-titre">
+  <header class="volet-tete">
+    <h2 id="reglages-titre">Réglages</h2>
+    <button class="rond petit" type="button" data-fermer aria-label="Fermer"><svg class="ico" aria-hidden="true"><use href="#i-fermer"/></svg></button>
+  </header>
+  <div class="volet-corps">
+    <h3>Écoute du piano</h3>
+    <label class="ligne-reglage"><span>Sensibilité du micro</span>
+      <select id="opt-sens" class="choix">
+        <option value="0.7">Faible (pièce bruyante)</option>
+        <option value="1" selected>Normale</option>
+        <option value="1.4">Élevée (piano doux, micro loin)</option>
+      </select>
+    </label>
+    <div class="ligne-reglage"><span>Tu joues dans un endroit calme ? Teste l'écoute :</span>
+      <a class="btn-plat" href="#/libre">Mon micro</a></div>
+
+    <h3>Jouer</h3>
+    <label class="inter"><span>Recommencer quand c'est fini</span><input type="checkbox" id="opt-loop" role="switch"><i></i></label>
+    <label class="inter"><span>Métronome en mode « À tempo »</span><input type="checkbox" id="opt-click" role="switch" checked><i></i></label>
+    <label class="ligne-reglage"><span>Précision du rythme</span>
+      <select id="opt-tol" class="choix">
+        <option value="0.75">Stricte</option>
+        <option value="1" selected>Normale</option>
+        <option value="1.5">Souple</option>
+      </select>
+    </label>
+    <label class="inter"><span>Noms des notes sur le clavier</span><input type="checkbox" id="opt-noms" role="switch" checked><i></i></label>
+
+    <h3>Tempo</h3>
+    <div class="rang-boutons">
+      <button class="btn-plat" id="btn-half" type="button">÷2</button>
+      <button class="btn-plat" id="btn-double" type="button">×2</button>
+    </div>
+
+    <h3>Son</h3>
+    <label class="ligne-reglage"><span>Volume du piano</span>
+      <input type="range" id="opt-vol" min="0.2" max="1" step="0.05" value="0.8" aria-label="Volume du piano de l'appli"></label>
+
+    <p class="muted small credit">Sons : piano de synthèse créé dans l'appli, rien à télécharger. Symboles de partition : police <i>Noto Music</i> (SIL Open Font License).</p>
+    <p class="muted small" id="version-detail"></p>
+  </div>
+</aside>
+
+<!-- Installation : proposée au premier démarrage -->
+<div class="modal" id="install-modal" hidden role="dialog" aria-modal="true" aria-labelledby="install-titre">
+  <div class="modal-box install-box">
+    <img class="install-icone" src="icons/icone-192.png" width="84" height="84" alt="">
+    <div class="install-texte">
+      <h2 id="install-titre">Installe Ma Piano</h2>
+      <p>Une icône sur ton écran d'accueil, l'appli en plein écran et à l'horizontale, et elle marche même sans connexion.</p>
+      <ol class="etapes" id="install-ios" hidden>
+        <li>Touche le bouton <b>Partager</b> de Safari (le carré avec une flèche vers le haut).</li>
+        <li>Choisis <b>Sur l'écran d'accueil</b>, puis <b>Ajouter</b>.</li>
+      </ol>
+      <p class="muted small" id="install-autre" hidden>Ouvre le menu du navigateur (⋮) et choisis <b>Installer l'application</b> ou <b>Ajouter à l'écran d'accueil</b>.</p>
+      <div class="rang-boutons">
+        <button class="btn-plat accent" id="install-oui" type="button" hidden>Installer</button>
+        <button class="btn-plat" id="install-non" type="button">Plus tard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /appli -->
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
