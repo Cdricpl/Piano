@@ -326,6 +326,20 @@
   </div>
 </div>
 
+<!-- Import MIDI : à quelle main va chaque partie du fichier -->
+<div class="modal" id="import-modal" hidden role="dialog" aria-modal="true" aria-labelledby="import-titre">
+  <div class="modal-box import-box">
+    <h2 id="import-titre">Les parties du fichier</h2>
+    <p class="muted small">Chant à droite, accompagnement à gauche : voix → <b>main droite</b>,
+      main gauche du piano → <b>main gauche</b>, main droite du piano → <b>ignorer</b>.</p>
+    <ul class="import-parties" id="import-parties"></ul>
+    <div class="rang-boutons">
+      <button class="btn-plat accent" id="import-oui" type="button">Importer</button>
+      <button class="btn-plat" id="import-non" type="button">Annuler</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /appli -->
 
 <script type="module" src="js/app.js"></script>

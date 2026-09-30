@@ -760,6 +760,17 @@ kbd{
 .carte-import .i-num{font-size:34px}
 .carte-import:focus-within{outline:3px solid var(--ton-2);outline-offset:2px}
 
+/* choix des mains à l'import MIDI */
+.import-box{max-width:560px}
+.import-box{padding:16px 20px}
+.import-box h2{font-size:22px}
+.import-parties{list-style:none;margin:10px 0 12px;padding:0;display:grid;gap:8px}
+.import-parties li{display:flex;align-items:center;gap:12px;padding:6px 12px;border-radius:14px;background:var(--fond, #f3f4fa)}
+.import-parties .ip-texte{flex:1;min-width:0;display:flex;flex-direction:column}
+.import-parties .ip-nom{font:700 16px var(--f-texte);overflow-wrap:anywhere}
+.import-parties .ip-meta{font:500 14px var(--f-texte);color:var(--texte-2)}
+.import-parties select{flex:none;font:600 15px var(--f-texte);padding:8px 10px;border-radius:10px;border:1px solid rgba(124,58,237,.35);background:var(--surface);color:inherit}
+
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22mp-fond%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2360a5fa%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237c3aed%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22mp-touche%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23e7e9f8%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22mp-noire%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%233b3f63%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231d2036%22%2F%3E%3C%2FlinearGradient%3E%3CclipPath%20id%3D%22mp-forme%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22116%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22116%22%20fill%3D%22url(%23mp-fond)%22%2F%3E%3Ccircle%20cx%3D%22420%22%20cy%3D%2270%22%20r%3D%22230%22%20fill%3D%22%23fff%22%20opacity%3D%22.14%22%20clip-path%3D%22url(%23mp-forme)%22%2F%3E%3Crect%20x%3D%2282%22%20y%3D%22196%22%20width%3D%22348%22%20height%3D%22250%22%20rx%3D%2234%22%20fill%3D%22%232a0f6b%22%20opacity%3D%22.28%22%2F%3E%3Crect%20x%3D%2272%22%20y%3D%22176%22%20width%3D%22368%22%20height%3D%22250%22%20rx%3D%2234%22%20fill%3D%22url(%23mp-touche)%22%2F%3E%3Cg%20stroke%3D%22%23c9cce6%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%3E%3Cline%20x1%3D%22133%22%20y1%3D%22300%22%20x2%3D%22133%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22195%22%20y1%3D%22300%22%20x2%3D%22195%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22256%22%20y1%3D%22300%22%20x2%3D%22256%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22317%22%20y1%3D%22300%22%20x2%3D%22317%22%20y2%3D%22420%22%2F%3E%3Cline%20x1%3D%22379%22%20y1%3D%22300%22%20x2%3D%22379%22%20y2%3D%22420%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22url(%23mp-noire)%22%3E%3Crect%20x%3D%22113%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3Crect%20x%3D%22175%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3Crect%20x%3D%22297%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3Crect%20x%3D%22359%22%20y%3D%22176%22%20width%3D%2240%22%20height%3D%22150%22%20rx%3D%2210%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23fff%22%3E%3Cellipse%20cx%3D%22184%22%20cy%3D%22120%22%20rx%3D%2230%22%20ry%3D%2222%22%20transform%3D%22rotate(-20%20184%20120)%22%2F%3E%3Crect%20x%3D%22206%22%20y%3D%2244%22%20width%3D%2212%22%20height%3D%2282%22%20rx%3D%226%22%2F%3E%3Cpath%20d%3D%22M206%2044c6%2026%2040%2032%2052%2066-18-12-34-14-52-14z%22%2F%3E%3C%2Fg%3E%3Crect%20x%3D%22197%22%20y%3D%22326%22%20width%3D%2256%22%20height%3D%2296%22%20rx%3D%2214%22%20fill%3D%22%23fff%22%20opacity%3D%220%22%2F%3E%3C%2Fsvg%3E">
 </head>
@@ -1071,6 +1082,20 @@ kbd{
   </div>
 </div>
 
+<!-- Import MIDI : à quelle main va chaque partie du fichier -->
+<div class="modal" id="import-modal" hidden role="dialog" aria-modal="true" aria-labelledby="import-titre">
+  <div class="modal-box import-box">
+    <h2 id="import-titre">Les parties du fichier</h2>
+    <p class="muted small">Chant à droite, accompagnement à gauche : voix → <b>main droite</b>,
+      main gauche du piano → <b>main gauche</b>, main droite du piano → <b>ignorer</b>.</p>
+    <ul class="import-parties" id="import-parties"></ul>
+    <div class="rang-boutons">
+      <button class="btn-plat accent" id="import-oui" type="button">Importer</button>
+      <button class="btn-plat" id="import-non" type="button">Annuler</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /appli -->
 
 <script type="module">
@@ -1079,7 +1104,7 @@ kbd{
 /* Numéro de version de l'application : affiché en haut de l'écran, et utilisé par
  * le service worker (build.js) pour que les téléphones installés récupèrent
  * chaque nouvelle version. À augmenter à chaque livraison. */
-const VERSION = '0.2.0';
+const VERSION = '0.2.1';
 const DATE_VERSION = '2026-09-30';
 
 
@@ -3041,8 +3066,9 @@ const MORCEAUX = [
  *
  * Ce que fait la conversion :
  *   - les débuts de notes sont arrondis à la double croche (1/4 de temps) ;
- *   - deux pistes ou plus : la plus aiguë en moyenne va à la main droite, la plus grave à la gauche ;
- *     une seule piste : partage autour du Do central ;
+ *   - chaque partie du fichier (piste, ou canal d'une piste) peut aller à la main droite, à la
+ *     main gauche, être partagée autour du Do central, ou être ignorée : on peut ainsi jouer le chant
+ *     à droite et l'accompagnement à gauche. Par défaut : la plus aiguë à droite, la plus grave à gauche ;
  *   - une note qui dépasse la barre de mesure est raccourcie jusqu'à la barre (pas de liaisons) ;
  *   - la batterie (canal 10) est ignorée. */
 
@@ -3071,7 +3097,7 @@ function lireMidi(buffer){
     if (texte(p, 4) !== 'MTrk'){ p += 8 + ((o[p + 4] << 24 | o[p + 5] << 16 | o[p + 6] << 8 | o[p + 7]) >>> 0); k--; continue; }
     p += 4;
     const fin = p + 4 + u32();
-    const piste = { nom:'', notes:[] };
+    const piste = { nom:'', notes:[], programmes:new Map() };
     const ouvertes = new Map();          // (canal, note) → note en cours
     let t = 0, statut = 0;
     while (p < fin){
@@ -3091,10 +3117,11 @@ function lireMidi(buffer){
         const type = s & 0xf0, canal = s & 0x0f;
         const d1 = o[p++], d2 = (type === 0xc0 || type === 0xd0) ? 0 : o[p++];
         if (canal === 9) continue;                                           // batterie
+        if (type === 0xc0){ if (!piste.programmes.has(canal)) piste.programmes.set(canal, d1); continue; }
         const cle = canal * 128 + d1;
         if (type === 0x90 && d2 > 0){
           if (ouvertes.has(cle)) ouvertes.get(cle).fin = t;
-          const n = { midi:d1, debut:t, fin:null };
+          const n = { midi:d1, debut:t, fin:null, canal };
           piste.notes.push(n); ouvertes.set(cle, n);
         } else if (type === 0x80 || type === 0x90){
           const n = ouvertes.get(cle);
@@ -3104,9 +3131,36 @@ function lireMidi(buffer){
     }
     for (const n of ouvertes.values()) n.fin = t;
     p = fin;
-    pistes.push(piste);
+    // une piste qui mélange plusieurs canaux (fichiers « format 0 ») : une partie par canal
+    const canaux = [...new Set(piste.notes.map(n => n.canal))];
+    const base = piste.nom || `Piste ${pistes.length + 1}`;
+    if (canaux.length <= 1) pistes.push({ nom:base, notes:piste.notes, programme:piste.programmes.get(canaux[0]) });
+    else for (const c of canaux) pistes.push({ nom:`${base} · canal ${c + 1}`, notes:piste.notes.filter(n => n.canal === c), programme:piste.programmes.get(c) });
   }
   return { format, division, pistes, tempos, mesures, armures };
+}
+
+/* ---------- les parties du fichier, et à quelle main les donner ---------- */
+const INSTRUMENTS = [[0, 'piano'], [8, 'percussions'], [16, 'orgue'], [24, 'guitare'], [32, 'basse'], [40, 'cordes'],
+  [48, 'ensemble / voix'], [56, 'cuivres'], [64, 'vents'], [80, 'synthé'], [88, 'nappe'], [96, 'effets'], [104, 'ethnique'], [112, 'percussions'], [120, 'effets']];
+const instrument = pr => pr == null ? '' : INSTRUMENTS.filter(([d]) => pr >= d).pop()[1];
+const moyenne = p => p.notes.reduce((s, n) => s + n.midi, 0) / p.notes.length;
+
+/* mains proposées par défaut, dans l'ordre des parties qui ont des notes :
+ * 'D' main droite, 'G' main gauche, 'A' partager autour du Do central, '' ignorer */
+function mainsParDefaut(avecNotes){
+  if (avecNotes.length === 1) return ['A'];
+  const ordre = [...avecNotes].sort((a, b) => moyenne(b) - moyenne(a));
+  const seuil = (moyenne(ordre[0]) + moyenne(ordre[ordre.length - 1])) / 2;
+  return avecNotes.map(p => p === ordre[0] ? 'D' : p === ordre[ordre.length - 1] ? 'G' : (moyenne(p) >= seuil ? 'D' : 'G'));
+}
+function partiesMidi(m){
+  const avecNotes = m.pistes.filter(p => p.notes.length);
+  const mains = mainsParDefaut(avecNotes);
+  return avecNotes.map((p, i) => ({
+    nom:p.nom, instrument:instrument(p.programme), n:p.notes.length,
+    min:Math.min(...p.notes.map(n => n.midi)), max:Math.max(...p.notes.map(n => n.midi)), main:mains[i]
+  }));
 }
 
 /* ---------- conversion en morceau ---------- */
@@ -3120,7 +3174,7 @@ const decouper = d => {                         // une durée → valeurs permis
   return r;
 };
 
-function versMorceau(m, nomFichier = 'Partition'){
+function versMorceau(m, nomFichier = 'Partition', mains = null){
   const div = m.division || 480;
   const q = tick => Math.round(tick / div * 4) / 4;           // en noires, à la double croche près
   const sig0 = m.mesures.sort((a, b) => a.t - b.t)[0];
@@ -3136,18 +3190,14 @@ function versMorceau(m, nomFichier = 'Partition'){
   // répartition des mains
   const avecNotes = m.pistes.filter(p => p.notes.length);
   if (!avecNotes.length) throw new Error('Aucune note de piano dans ce fichier.');
-  const moyenne = p => p.notes.reduce((s, n) => s + n.midi, 0) / p.notes.length;
+  const choix = mains || mainsParDefaut(avecNotes);
   const notes = [];
-  if (avecNotes.length === 1){
-    for (const n of avecNotes[0].notes) notes.push({ ...n, main:n.midi >= 60 ? 'D' : 'G' });
-  } else {
-    const triees = [...avecNotes].sort((a, b) => moyenne(b) - moyenne(a));
-    const seuil = (moyenne(triees[0]) + moyenne(triees[triees.length - 1])) / 2;
-    triees.forEach((p, i) => {
-      const main = i === 0 ? 'D' : i === triees.length - 1 ? 'G' : (moyenne(p) >= seuil ? 'D' : 'G');
-      for (const n of p.notes) notes.push({ ...n, main });
-    });
-  }
+  avecNotes.forEach((p, i) => {
+    const c = choix[i];
+    if (!c) return;
+    for (const n of p.notes) notes.push({ ...n, main:c === 'A' ? (n.midi >= 60 ? 'D' : 'G') : c });
+  });
+  if (!notes.length) throw new Error('aucune partie choisie.');
   const plage = n => n.midi >= 21 && n.midi <= 108;
   const t0 = Math.floor(Math.min(...notes.map(n => q(n.debut))) / beats) * beats;   // saute les mesures vides du début
   const evts = { D:new Map(), G:new Map() };
@@ -3757,19 +3807,52 @@ function ecranPerso(){
   });
   $('#fichier-midi').addEventListener('change', async e => {
     const f = e.target.files && e.target.files[0];
+    e.target.value = '';
     if (!f) return;
-    try {
-      const it = versMorceau(lireMidi(await f.arrayBuffer()), f.name);
-      const c = compilerItem(it);
-      if (c.erreurs.length) throw new Error('conversion incomplète : ' + c.erreurs[0]);
-      if (!c.notes.length) throw new Error('aucune note trouvée.');
-      IMPORTS.push(it); MORCEAUX.push(it);
-      if (!sauverImports()) annoncer("Partition ouverte, mais pas enregistrée : plus de place sur l'appareil.");
-      location.hash = lienJouer('morceau', it);
-    } catch (err){
-      annoncer('Import impossible : ' + err.message);
-    }
+    let m;
+    try { m = lireMidi(await f.arrayBuffer()); }
+    catch (err){ annoncer('Import impossible : ' + err.message); return; }
+    const parties = partiesMidi(m);
+    if (!parties.length){ annoncer('Import impossible : aucune note de piano dans ce fichier.'); return; }
+    if (parties.length === 1) importerMidi(m, f.name, null);
+    else choisirMains(parties, mains => importerMidi(m, f.name, mains));
   });
+}
+function importerMidi(m, nomFichier, mains){
+  try {
+    const it = versMorceau(m, nomFichier, mains);
+    const c = compilerItem(it);
+    if (c.erreurs.length) throw new Error('conversion incomplète : ' + c.erreurs[0]);
+    if (!c.notes.length) throw new Error('aucune note trouvée.');
+    IMPORTS.push(it); MORCEAUX.push(it);
+    if (!sauverImports()) annoncer("Partition ouverte, mais pas enregistrée : plus de place sur l'appareil.");
+    location.hash = lienJouer('morceau', it);
+  } catch (err){
+    cache.clear();
+    annoncer('Import impossible : ' + err.message);
+  }
+}
+/* fenêtre : à quelle main va chaque partie du fichier */
+const CHOIX_MAINS = [['D', 'Main droite'], ['G', 'Main gauche'], ['A', 'Partager (Do central)'], ['', 'Ignorer']];
+function choisirMains(parties, suite){
+  const liste = $('#import-parties');
+  liste.innerHTML = parties.map((p, i) => `<li>
+      <span class="ip-texte"><span class="ip-nom">${echapper(p.nom)}</span>
+      <span class="ip-meta">${p.instrument ? p.instrument + ' · ' : ''}${p.n} notes · ${nomNote(p.min, null)}–${nomNote(p.max, null)}</span></span>
+      <select data-i="${i}" aria-label="Main pour ${echapper(p.nom)}">${CHOIX_MAINS.map(([v, t]) => `<option value="${v}"${v === p.main ? ' selected' : ''}>${t}</option>`).join('')}</select>
+    </li>`).join('');
+  const modal = $('#import-modal');
+  modal.hidden = false;
+  const fermer = () => { modal.hidden = true; $('#import-oui').onclick = $('#import-non').onclick = modal.onclick = null; };
+  $('#import-oui').onclick = () => {
+    const mains = [...liste.querySelectorAll('select')].map(x => x.value);
+    if (mains.every(v => !v)){ annoncer('Choisis au moins une partie.'); return; }
+    fermer(); suite(mains);
+  };
+  $('#import-non').onclick = fermer;
+  modal.onclick = e => { if (e.target === modal) fermer(); };
+  modal.querySelector('.modal-box').scrollTop = 0;
+  $('#import-oui').focus({ preventScroll:true });
 }
 function supprimerImport(id){
   const i = IMPORTS.findIndex(x => x.id === id), j = MORCEAUX.findIndex(x => x.id === id);

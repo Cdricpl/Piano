@@ -742,3 +742,14 @@ kbd{
 .carte-import{cursor:pointer}
 .carte-import .i-num{font-size:34px}
 .carte-import:focus-within{outline:3px solid var(--ton-2);outline-offset:2px}
+
+/* choix des mains à l'import MIDI */
+.import-box{max-width:560px}
+.import-box{padding:16px 20px}
+.import-box h2{font-size:22px}
+.import-parties{list-style:none;margin:10px 0 12px;padding:0;display:grid;gap:8px}
+.import-parties li{display:flex;align-items:center;gap:12px;padding:6px 12px;border-radius:14px;background:var(--fond, #f3f4fa)}
+.import-parties .ip-texte{flex:1;min-width:0;display:flex;flex-direction:column}
+.import-parties .ip-nom{font:700 16px var(--f-texte);overflow-wrap:anywhere}
+.import-parties .ip-meta{font:500 14px var(--f-texte);color:var(--texte-2)}
+.import-parties select{flex:none;font:600 15px var(--f-texte);padding:8px 10px;border-radius:10px;border:1px solid rgba(124,58,237,.35);background:var(--surface);color:inherit}

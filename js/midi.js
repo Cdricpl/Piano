@@ -4,8 +4,9 @@
  *
  * Ce que fait la conversion :
  *   - les débuts de notes sont arrondis à la double croche (1/4 de temps) ;
- *   - deux pistes ou plus : la plus aiguë en moyenne va à la main droite, la plus grave à la gauche ;
- *     une seule piste : partage autour du Do central ;
+ *   - chaque partie du fichier (piste, ou canal d'une piste) peut aller à la main droite, à la
+ *     main gauche, être partagée autour du Do central, ou être ignorée : on peut ainsi jouer le chant
+ *     à droite et l'accompagnement à gauche. Par défaut : la plus aiguë à droite, la plus grave à gauche ;
  *   - une note qui dépasse la barre de mesure est raccourcie jusqu'à la barre (pas de liaisons) ;
  *   - la batterie (canal 10) est ignorée. */
 
@@ -34,7 +35,7 @@ export function lireMidi(buffer){
     if (texte(p, 4) !== 'MTrk'){ p += 8 + ((o[p + 4] << 24 | o[p + 5] << 16 | o[p + 6] << 8 | o[p + 7]) >>> 0); k--; continue; }
     p += 4;
     const fin = p + 4 + u32();
-    const piste = { nom:'', notes:[] };
+    const piste = { nom:'', notes:[], programmes:new Map() };
     const ouvertes = new Map();          // (canal, note) → note en cours
     let t = 0, statut = 0;
     while (p < fin){
@@ -54,10 +55,11 @@ export function lireMidi(buffer){
         const type = s & 0xf0, canal = s & 0x0f;
         const d1 = o[p++], d2 = (type === 0xc0 || type === 0xd0) ? 0 : o[p++];
         if (canal === 9) continue;                                           // batterie
+        if (type === 0xc0){ if (!piste.programmes.has(canal)) piste.programmes.set(canal, d1); continue; }
         const cle = canal * 128 + d1;
         if (type === 0x90 && d2 > 0){
           if (ouvertes.has(cle)) ouvertes.get(cle).fin = t;
-          const n = { midi:d1, debut:t, fin:null };
+          const n = { midi:d1, debut:t, fin:null, canal };
           piste.notes.push(n); ouvertes.set(cle, n);
         } else if (type === 0x80 || type === 0x90){
           const n = ouvertes.get(cle);
@@ -67,9 +69,36 @@ export function lireMidi(buffer){
     }
     for (const n of ouvertes.values()) n.fin = t;
     p = fin;
-    pistes.push(piste);
+    // une piste qui mélange plusieurs canaux (fichiers « format 0 ») : une partie par canal
+    const canaux = [...new Set(piste.notes.map(n => n.canal))];
+    const base = piste.nom || `Piste ${pistes.length + 1}`;
+    if (canaux.length <= 1) pistes.push({ nom:base, notes:piste.notes, programme:piste.programmes.get(canaux[0]) });
+    else for (const c of canaux) pistes.push({ nom:`${base} · canal ${c + 1}`, notes:piste.notes.filter(n => n.canal === c), programme:piste.programmes.get(c) });
   }
   return { format, division, pistes, tempos, mesures, armures };
+}
+
+/* ---------- les parties du fichier, et à quelle main les donner ---------- */
+const INSTRUMENTS = [[0, 'piano'], [8, 'percussions'], [16, 'orgue'], [24, 'guitare'], [32, 'basse'], [40, 'cordes'],
+  [48, 'ensemble / voix'], [56, 'cuivres'], [64, 'vents'], [80, 'synthé'], [88, 'nappe'], [96, 'effets'], [104, 'ethnique'], [112, 'percussions'], [120, 'effets']];
+const instrument = pr => pr == null ? '' : INSTRUMENTS.filter(([d]) => pr >= d).pop()[1];
+const moyenne = p => p.notes.reduce((s, n) => s + n.midi, 0) / p.notes.length;
+
+/* mains proposées par défaut, dans l'ordre des parties qui ont des notes :
+ * 'D' main droite, 'G' main gauche, 'A' partager autour du Do central, '' ignorer */
+function mainsParDefaut(avecNotes){
+  if (avecNotes.length === 1) return ['A'];
+  const ordre = [...avecNotes].sort((a, b) => moyenne(b) - moyenne(a));
+  const seuil = (moyenne(ordre[0]) + moyenne(ordre[ordre.length - 1])) / 2;
+  return avecNotes.map(p => p === ordre[0] ? 'D' : p === ordre[ordre.length - 1] ? 'G' : (moyenne(p) >= seuil ? 'D' : 'G'));
+}
+export function partiesMidi(m){
+  const avecNotes = m.pistes.filter(p => p.notes.length);
+  const mains = mainsParDefaut(avecNotes);
+  return avecNotes.map((p, i) => ({
+    nom:p.nom, instrument:instrument(p.programme), n:p.notes.length,
+    min:Math.min(...p.notes.map(n => n.midi)), max:Math.max(...p.notes.map(n => n.midi)), main:mains[i]
+  }));
 }
 
 /* ---------- conversion en morceau ---------- */
@@ -83,7 +112,7 @@ const decouper = d => {                         // une durée → valeurs permis
   return r;
 };
 
-export function versMorceau(m, nomFichier = 'Partition'){
+export function versMorceau(m, nomFichier = 'Partition', mains = null){
   const div = m.division || 480;
   const q = tick => Math.round(tick / div * 4) / 4;           // en noires, à la double croche près
   const sig0 = m.mesures.sort((a, b) => a.t - b.t)[0];
@@ -99,18 +128,14 @@ export function versMorceau(m, nomFichier = 'Partition'){
   // répartition des mains
   const avecNotes = m.pistes.filter(p => p.notes.length);
   if (!avecNotes.length) throw new Error('Aucune note de piano dans ce fichier.');
-  const moyenne = p => p.notes.reduce((s, n) => s + n.midi, 0) / p.notes.length;
+  const choix = mains || mainsParDefaut(avecNotes);
   const notes = [];
-  if (avecNotes.length === 1){
-    for (const n of avecNotes[0].notes) notes.push({ ...n, main:n.midi >= 60 ? 'D' : 'G' });
-  } else {
-    const triees = [...avecNotes].sort((a, b) => moyenne(b) - moyenne(a));
-    const seuil = (moyenne(triees[0]) + moyenne(triees[triees.length - 1])) / 2;
-    triees.forEach((p, i) => {
-      const main = i === 0 ? 'D' : i === triees.length - 1 ? 'G' : (moyenne(p) >= seuil ? 'D' : 'G');
-      for (const n of p.notes) notes.push({ ...n, main });
-    });
-  }
+  avecNotes.forEach((p, i) => {
+    const c = choix[i];
+    if (!c) return;
+    for (const n of p.notes) notes.push({ ...n, main:c === 'A' ? (n.midi >= 60 ? 'D' : 'G') : c });
+  });
+  if (!notes.length) throw new Error('aucune partie choisie.');
   const plage = n => n.midi >= 21 && n.midi <= 108;
   const t0 = Math.floor(Math.min(...notes.map(n => q(n.debut))) / beats) * beats;   // saute les mesures vides du début
   const evts = { D:new Map(), G:new Map() };

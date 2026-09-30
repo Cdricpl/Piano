@@ -7,7 +7,7 @@ import { Ecoute } from './ecoute.js';
 import { Jeu } from './jeu.js';
 import { LECONS, NIVEAUX } from './lecons.js';
 import { MORCEAUX, GENRES } from './morceaux.js';
-import { lireMidi, versMorceau } from './midi.js';
+import { lireMidi, versMorceau, partiesMidi } from './midi.js';
 import { EXERCICES, FAMILLES_EX } from './exercices.js';
 import { CATEGORIES, clavierNiveau, miniPiece, miniTouches, miniVinyle } from './illustrations.js';
 import * as P from './progress.js';
@@ -358,19 +358,52 @@ function ecranPerso(){
   });
   $('#fichier-midi').addEventListener('change', async e => {
     const f = e.target.files && e.target.files[0];
+    e.target.value = '';
     if (!f) return;
-    try {
-      const it = versMorceau(lireMidi(await f.arrayBuffer()), f.name);
-      const c = compilerItem(it);
-      if (c.erreurs.length) throw new Error('conversion incomplète : ' + c.erreurs[0]);
-      if (!c.notes.length) throw new Error('aucune note trouvée.');
-      IMPORTS.push(it); MORCEAUX.push(it);
-      if (!sauverImports()) annoncer("Partition ouverte, mais pas enregistrée : plus de place sur l'appareil.");
-      location.hash = lienJouer('morceau', it);
-    } catch (err){
-      annoncer('Import impossible : ' + err.message);
-    }
+    let m;
+    try { m = lireMidi(await f.arrayBuffer()); }
+    catch (err){ annoncer('Import impossible : ' + err.message); return; }
+    const parties = partiesMidi(m);
+    if (!parties.length){ annoncer('Import impossible : aucune note de piano dans ce fichier.'); return; }
+    if (parties.length === 1) importerMidi(m, f.name, null);
+    else choisirMains(parties, mains => importerMidi(m, f.name, mains));
   });
+}
+function importerMidi(m, nomFichier, mains){
+  try {
+    const it = versMorceau(m, nomFichier, mains);
+    const c = compilerItem(it);
+    if (c.erreurs.length) throw new Error('conversion incomplète : ' + c.erreurs[0]);
+    if (!c.notes.length) throw new Error('aucune note trouvée.');
+    IMPORTS.push(it); MORCEAUX.push(it);
+    if (!sauverImports()) annoncer("Partition ouverte, mais pas enregistrée : plus de place sur l'appareil.");
+    location.hash = lienJouer('morceau', it);
+  } catch (err){
+    cache.clear();
+    annoncer('Import impossible : ' + err.message);
+  }
+}
+/* fenêtre : à quelle main va chaque partie du fichier */
+const CHOIX_MAINS = [['D', 'Main droite'], ['G', 'Main gauche'], ['A', 'Partager (Do central)'], ['', 'Ignorer']];
+function choisirMains(parties, suite){
+  const liste = $('#import-parties');
+  liste.innerHTML = parties.map((p, i) => `<li>
+      <span class="ip-texte"><span class="ip-nom">${echapper(p.nom)}</span>
+      <span class="ip-meta">${p.instrument ? p.instrument + ' · ' : ''}${p.n} notes · ${nomNote(p.min, null)}–${nomNote(p.max, null)}</span></span>
+      <select data-i="${i}" aria-label="Main pour ${echapper(p.nom)}">${CHOIX_MAINS.map(([v, t]) => `<option value="${v}"${v === p.main ? ' selected' : ''}>${t}</option>`).join('')}</select>
+    </li>`).join('');
+  const modal = $('#import-modal');
+  modal.hidden = false;
+  const fermer = () => { modal.hidden = true; $('#import-oui').onclick = $('#import-non').onclick = modal.onclick = null; };
+  $('#import-oui').onclick = () => {
+    const mains = [...liste.querySelectorAll('select')].map(x => x.value);
+    if (mains.every(v => !v)){ annoncer('Choisis au moins une partie.'); return; }
+    fermer(); suite(mains);
+  };
+  $('#import-non').onclick = fermer;
+  modal.onclick = e => { if (e.target === modal) fermer(); };
+  modal.querySelector('.modal-box').scrollTop = 0;
+  $('#import-oui').focus({ preventScroll:true });
 }
 function supprimerImport(id){
   const i = IMPORTS.findIndex(x => x.id === id), j = MORCEAUX.findIndex(x => x.id === id);

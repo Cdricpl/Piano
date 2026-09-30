@@ -33,8 +33,10 @@ niveau sonore et un réglage de sensibilité. C'est l'endroit pour vérifier que
 - **Mes partitions** : importe un fichier **MIDI** (`.mid`) — une partition complète téléchargée ou exportée
   de MuseScore — et joue-la comme les autres morceaux, avec l'écoute du micro. Le fichier est converti sur
   l'appareil et y reste (rien n'est envoyé). La conversion arrondit les débuts de notes à la double croche et
-  coupe les notes tenues à la barre de mesure ; deux pistes = main droite et main gauche, une seule piste =
-  partage autour du Do central.
+  coupe les notes tenues à la barre de mesure. S'il y a plusieurs parties (pistes, ou canaux d'une même
+  piste), une fenêtre permet de donner chacune à la main droite, à la main gauche, de la partager autour du
+  Do central ou de l'ignorer : avec un fichier « chant + piano », on joue **le chant à la main droite et
+  l'accompagnement à la main gauche**.
 - **Acquis / À travailler** : deux boutons dans le lecteur marquent n'importe quel élément ; la page Progression
   les regroupe.
 
