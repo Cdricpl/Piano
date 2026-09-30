@@ -56,7 +56,7 @@ for (const t of TAILLES){
   } catch {} });
   const p = await ctx.newPage(); const err = []; p.on('pageerror', e => err.push(e.message));
   await p.goto('file://' + racine + 'ma-piano.html#/'); await p.waitForTimeout(1200);
-  const routes = ['#/', '#/parcours', '#/parcours/1', '#/parcours/3', '#/morceaux', '#/morceaux/pop', '#/exercices', '#/exercices/gammes', '#/progression', '#/libre', '#/jouer/lecon/l03', '#/jouer/lecon/l14', '#/jouer/lecon/l32', '#/jouer/morceau/m-someone', '#/jouer/morceau/m-clocks', '#/jouer/morceau/m-douce', '#/jouer/exercice/ex-g-sol'];
+  const routes = ['#/', '#/parcours', '#/parcours/1', '#/parcours/3', '#/morceaux', '#/morceaux/pop', '#/morceaux/perso', '#/exercices', '#/exercices/gammes', '#/progression', '#/libre', '#/jouer/lecon/l03', '#/jouer/lecon/l14', '#/jouer/lecon/l32', '#/jouer/morceau/m-someone', '#/jouer/morceau/m-clocks', '#/jouer/morceau/m-douce', '#/jouer/exercice/ex-g-sol'];
   // sous-écrans : première et dernière tuile de chaque catégorie
   for (const r of ['#/parcours', '#/morceaux', '#/exercices']){
     await p.evaluate(h => location.hash = h, r); await p.waitForTimeout(250);

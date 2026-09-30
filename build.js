@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const ORDRE = [
   'js/version.js', 'js/notes.js', 'js/glyphes.js', 'js/partition.js', 'js/clavier.js', 'js/son.js', 'js/ecoute.js', 'js/jeu.js',
-  'js/airs.js', 'js/lecons.js', 'js/exercices.js', 'js/morceaux.js', 'js/illustrations.js', 'js/progress.js', 'js/app.js'
+  'js/airs.js', 'js/lecons.js', 'js/exercices.js', 'js/morceaux.js', 'js/midi.js', 'js/illustrations.js', 'js/progress.js', 'js/app.js'
 ];
 
 /* app.js fait « import * as P from './progress.js' » : on reconstruit l'objet

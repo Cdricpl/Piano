@@ -132,8 +132,11 @@ export function creerPartition(morceau, { noms = false } = {}){
   for (let m = 0; m < morceau.mesures; m++){
     const xf = m + 1 < morceau.mesures ? mesureX[m + 1] - 3 : largeurPiste - 34;
     if (m + 1 < morceau.mesures) barre(piste, xf);
-    const num = el('text', { x:mesureX[m] + 4, y:(pasDeSol ? faHaut : solHaut) - 8, class:'num-mesure' }, piste);
-    num.textContent = m + 1;
+    // numéro de mesure juste avant la barre (à droite, il se mêlait aux doigtés) ; pas de numéro sur la 1re
+    if (m > 0){
+      const num = el('text', { x:mesureX[m] - 6, y:(pasDeSol ? faHaut : solHaut) - 6, 'text-anchor':'end', class:'num-mesure' }, piste);
+      num.textContent = m + 1;
+    }
   }
   barre(piste, largeurPiste - 34); barre(piste, largeurPiste - 30, true);
   for (const s of morceau.sections){
@@ -416,8 +419,22 @@ export function creerPartition(morceau, { noms = false } = {}){
     for (const g of racine.querySelectorAll('.ok, .faux')) g.classList.remove('ok', 'faux');
     cibles = [];
   }
-  /* défilement continu pendant une lecture : position en temps (noires) */
-  function placerAuTemps(t){ placerX(xDeTemps(t) + LARG_TETE / 2, false); }
+  /* défilement continu pendant une lecture : position en temps (noires).
+   * On relie les notes entre elles par des segments : chaque note passe exactement sous le curseur
+   * à son heure, et l'espace pris par une barre de mesure est rattrapé en douceur au lieu de faire
+   * sauter la partition. */
+  const ancres = [...new Set(morceau.etapes.map(e => e.t))].map(t => [t, xDeTemps(t)]);
+  if (!ancres.length || ancres[0][0] > 0) ancres.unshift([0, xDeTemps(0)]);
+  ancres.push([morceau.total, largeurPiste - 34 - LARG_TETE / 2]);
+  function xDefilement(t){
+    if (t <= ancres[0][0]) return ancres[0][1] + (t - ancres[0][0]) * bw;
+    let lo = 0, hi = ancres.length - 1;
+    if (t >= ancres[hi][0]) return ancres[hi][1];
+    while (hi - lo > 1){ const mi = (lo + hi) >> 1; if (ancres[mi][0] <= t) lo = mi; else hi = mi; }
+    const [ta, xa] = ancres[lo], [tb, xb] = ancres[hi];
+    return xa + (xb - xa) * (t - ta) / (tb - ta);
+  }
+  function placerAuTemps(t){ placerX(xDefilement(t) + LARG_TETE / 2, false); }
 
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(dimensionner).observe(racine);
   return { racine, dimensionner, definirCible, noteEtat, etapeFaite, reinitialiser, aller, placerAuTemps, teteParNote,

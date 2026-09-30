@@ -30,16 +30,22 @@ niveau sonore et un réglage de sensibilité. C'est l'endroit pour vérifier que
   - *Classiques* : Ode à la joie (deux mains), Canon en ré ;
   - *Pop* : Adele (Someone Like You, Hello, Rolling in the Deep), Coldplay (Clocks, Viva la Vida, The Scientist, Fix You) ;
   - *Rock* : My Chemical Romance (Helena) ; *Disney* : Libérée, délivrée.
+- **Mes partitions** : importe un fichier **MIDI** (`.mid`) — une partition complète téléchargée ou exportée
+  de MuseScore — et joue-la comme les autres morceaux, avec l'écoute du micro. Le fichier est converti sur
+  l'appareil et y reste (rien n'est envoyé). La conversion arrondit les débuts de notes à la double croche et
+  coupe les notes tenues à la barre de mesure ; deux pistes = main droite et main gauche, une seule piste =
+  partage autour du Do central.
 - **Acquis / À travailler** : deux boutons dans le lecteur marquent n'importe quel élément ; la page Progression
   les regroupe.
 
 ### À propos des chansons protégées
 
 Les mélodies des chansons sous droits **ne sont pas reproduites**. Pour ces titres (Adele, Coldplay, Disney, MCR),
-l'appli propose l'**accompagnement** : la suite d'accords et la basse, simplifiées pour débuter, avec des
-arpèges ou des accords. Ce n'est pas une transcription : c'est de quoi jouer par-dessus l'enregistrement ou
-chanter. Les progressions viennent de sources publiques (tablatures d'accords) ; celles marquées
-*« à vérifier à l'oreille »* (Clocks, Fix You, Helena, Libérée délivrée) sont les moins sûres.
+l'appli propose l'**accompagnement de toute la chanson**, partie par partie (intro, couplets, pré-refrain,
+refrains, pont, fin) : la suite d'accords et la basse, en arpèges ou en accords, dans la tonalité de
+l'enregistrement. Ce n'est pas une transcription : c'est de quoi jouer par-dessus l'enregistrement ou chanter.
+Les accords viennent de grilles publiques ; le nombre de passages de chaque partie est approximatif
+(*« à vérifier à l'oreille »*). Pour une partition note pour note, utilise **Mes partitions** (import MIDI).
 Les airs traditionnels (Ode à la joie, Douce nuit, etc.) sont joués note pour note.
 
 ## Comment l'appli écoute (et ses limites)
@@ -101,6 +107,7 @@ js/ecoute.js          l'écoute du micro : notes, attaques
 js/jeu.js             pas à pas, à tempo, démonstration
 js/lecons.js          les 33 leçons          js/exercices.js   les 18 exercices
 js/morceaux.js        les morceaux           js/airs.js        les airs du domaine public
+js/midi.js            import d'un fichier MIDI (lecture, conversion au format compact)
 js/illustrations.js   les petits dessins     js/progress.js    la progression (localStorage)
 js/app.js             l'assemblage : écrans, navigation, réglages
 ```

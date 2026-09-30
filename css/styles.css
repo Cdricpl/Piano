@@ -737,3 +737,8 @@ kbd{
 .libre-sens input{flex:1;min-width:60px}
 .libre-sens span{min-width:56px;font-family:var(--f-chiffres);font-size:12px}
 @container appli (max-height:380px){ .libre-note{font-size:54px} .libre-sous{display:none} }
+
+/* carte « Importer un fichier MIDI » (Mes partitions) */
+.carte-import{cursor:pointer}
+.carte-import .i-num{font-size:34px}
+.carte-import:focus-within{outline:3px solid var(--ton-2);outline-offset:2px}

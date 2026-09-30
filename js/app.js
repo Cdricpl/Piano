@@ -7,6 +7,7 @@ import { Ecoute } from './ecoute.js';
 import { Jeu } from './jeu.js';
 import { LECONS, NIVEAUX } from './lecons.js';
 import { MORCEAUX, GENRES } from './morceaux.js';
+import { lireMidi, versMorceau } from './midi.js';
 import { EXERCICES, FAMILLES_EX } from './exercices.js';
 import { CATEGORIES, clavierNiveau, miniPiece, miniTouches, miniVinyle } from './illustrations.js';
 import * as P from './progress.js';
@@ -34,7 +35,18 @@ const gradStyle = g => `--c1:${g[0]};--c2:${g[1]}`;
 const parNiveau = liste => [...liste].sort((a, b) => (a.niveau || 1) - (b.niveau || 1));
 const CONSEIL = t => `<div class="tip"><span class="tip-lbl">Conseil</span><p>${t}</p></div>`;
 
-const genreDe = m => GENRES.find(g => g.styles.includes(m.style)) || GENRES[0];
+/* ---- mes partitions : fichiers MIDI importés, gardés sur l'appareil ---- */
+const CLE_IMPORTS = 'ma-piano-partitions-v1';
+const PERSO = { id:'perso', nom:'Mes partitions', styles:['Import'], grad:['#fbbf24', '#b45309'] };
+GENRES.unshift(PERSO);                   // en premier : on la voit sans faire défiler
+const IMPORTS = lire(CLE_IMPORTS, []);
+MORCEAUX.push(...IMPORTS);
+function sauverImports(){
+  try { localStorage.setItem(CLE_IMPORTS, JSON.stringify(IMPORTS)); return true; }
+  catch { return false; }
+}
+
+const genreDe = m => GENRES.find(g => g.styles.includes(m.style)) || GENRES.find(g => g.id === 'pop');
 const morceauxDe = g => parNiveau(MORCEAUX.filter(m => genreDe(m) === g));
 const exercicesDe = fam => parNiveau(EXERCICES.filter(e => e.famille === fam));
 
@@ -47,6 +59,7 @@ const SOURCES = { lecon:LECONS, morceau:MORCEAUX, exercice:EXERCICES };
 const lienJouer = (liste, it) => `#/jouer/${liste}/${encodeURIComponent(it.id)}`;
 const prochaineLecon = () => LECONS.find(l => !P.estFaite(l.id)) || LECONS[LECONS.length - 1];
 const titreDe = it => it.titre || it.nom;
+const echapper = t => String(t).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' })[c]);
 
 /* un morceau compilé (mis en cache) */
 const cache = new Map();
@@ -306,19 +319,21 @@ function ecranMorceaux(){
     html:`<div class="rangee tuiles">${GENRES.map(g => {
       const lot = morceauxDe(g);
       return tuile({ href:'#/morceaux/' + g.id, illus:miniVinyle(), titre:g.nom,
-        texte:[...new Set(lot.map(m => m.artiste))].slice(0, 3).join(', '), coin:`${lot.length} titre${lot.length > 1 ? 's' : ''}`, grad:g.grad });
+        texte:g === PERSO ? 'Importe une partition complète (fichier MIDI)' : [...new Set(lot.map(m => m.artiste))].slice(0, 3).join(', '),
+        coin:`${lot.length} titre${lot.length > 1 ? 's' : ''}`, grad:g.grad });
     }).join('')}</div>`
   });
 }
 function carteMorceau(m, grad){
   const c = compilerItem(m);
-  return itemCarte({ href:lienJouer('morceau', m), nom:m.titre, meta:`${m.artiste} · ${m.annee}`, niveau:m.niveau,
+  return itemCarte({ href:lienJouer('morceau', m), nom:echapper(m.titre), meta:`${m.artiste} · ${m.annee}`, niveau:m.niveau,
     bpm:`${m.tempo} BPM`, illus:miniPiece(c), grad,
-    badge:`<span class="cle">${m.type === 'air' ? 'mélodie' : 'accords'}</span>` });
+    badge:`<span class="cle">${m.type === 'air' ? 'mélodie' : m.type === 'import' ? 'partition' : 'accords'}</span>` });
 }
 function ecranGenre(id){
   const g = GENRES.find(x => x.id === id);
   if (!g) return ecranMorceaux();
+  if (g === PERSO) return ecranPerso();
   const lot = morceauxDe(g);
   let html = '';
   for (const n of [1, 2, 3, 4, 5]){
@@ -326,6 +341,44 @@ function ecranGenre(id){
     if (niv.length) html += groupe('m-niv' + n, n, niv, m => carteMorceau(m, NIV_GRAD[n - 1]));
   }
   ecranListe({ sur:`Morceaux · ${lot.length} titre${lot.length > 1 ? 's' : ''}, par niveau`, titre:g.nom, retour:'#/morceaux', html, sauts:sautsNiveaux(lot, 'm-niv') });
+}
+
+function ecranPerso(){
+  const lot = morceauxDe(PERSO);
+  const carteImport = `<label class="item-carte carte-import" style="${gradStyle(PERSO.grad)}">
+      <input type="file" id="fichier-midi" accept=".mid,.midi,.kar,audio/midi,audio/x-midi" hidden>
+      <div class="i-corps"><div class="i-vis i-vis-num"><span class="i-num">+</span></div>
+      <div class="i-texte"><span class="i-nom">Importer un fichier MIDI</span>
+      <span class="i-meta">Partition complète (.mid)</span></div></div>
+    </label>`;
+  ecranListe({
+    sur:lot.length ? `${lot.length} partition${lot.length > 1 ? 's' : ''} · sur cet appareil` : 'Sur cet appareil',
+    titre:PERSO.nom, retour:'#/morceaux',
+    html:`<div class="rangee">${carteImport}${lot.map(m => carteMorceau(m, PERSO.grad)).join('')}</div>`
+  });
+  $('#fichier-midi').addEventListener('change', async e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    try {
+      const it = versMorceau(lireMidi(await f.arrayBuffer()), f.name);
+      const c = compilerItem(it);
+      if (c.erreurs.length) throw new Error('conversion incomplète : ' + c.erreurs[0]);
+      if (!c.notes.length) throw new Error('aucune note trouvée.');
+      IMPORTS.push(it); MORCEAUX.push(it);
+      if (!sauverImports()) annoncer("Partition ouverte, mais pas enregistrée : plus de place sur l'appareil.");
+      location.hash = lienJouer('morceau', it);
+    } catch (err){
+      annoncer('Import impossible : ' + err.message);
+    }
+  });
+}
+function supprimerImport(id){
+  const i = IMPORTS.findIndex(x => x.id === id), j = MORCEAUX.findIndex(x => x.id === id);
+  if (i >= 0) IMPORTS.splice(i, 1);
+  if (j >= 0) MORCEAUX.splice(j, 1);
+  cache.delete(id);
+  P.setStatut('morceau', id, null);
+  sauverImports();
 }
 
 /* --- exercices --- */
@@ -374,7 +427,7 @@ function ecranProgression(){
     return `<div class="bloc bloc-statut bloc-defile ${s}">
       <h3><svg class="ico" aria-hidden="true"><use href="${ico}"/></svg>${titre} · ${l.length}</h3>
       ${l.length ? `<ul class="liste-statut">${l.map(e => `<li><a href="${lienJouer(e.liste, e.it)}">
-          <span class="ls-cat">${LISTES[e.liste].nom}</span><span class="ls-nom">${titreDe(e.it)}</span></a></li>`).join('')}</ul>`
+          <span class="ls-cat">${LISTES[e.liste].nom}</span><span class="ls-nom">${echapper(titreDe(e.it))}</span></a></li>`).join('')}</ul>`
         : `<p class="muted small">${vide}</p>`}
     </div>`;
   };
@@ -540,13 +593,20 @@ function corpsAide(liste, it, c){
         ${LECONS[idx + 1] ? `<a class="btn-plat accent" href="${lienJouer('lecon', LECONS[idx + 1])}">Leçon suivante</a>` : ''}
       </div>`;
   }
+  if (liste === 'morceau' && it.type === 'import'){
+    return `<h2>${echapper(it.titre)}</h2><p class="muted">Importé le ${it.annee}</p>
+      ${badges(`${it.sig} · ${it.tempo} BPM`, it.armure ? `Tonalité ${it.armure}` : 'Do majeur', `${Math.round(c.total / c.beats)} mesures`)}
+      <p>${echapper(it.desc)}</p>${CONSEIL(it.astuce)}
+      <p class="muted small">La conversion arrondit les débuts de notes à la double croche et coupe les notes tenues à la barre de mesure : les triolets et les liaisons peuvent sembler un peu différents de la partition d'origine.</p>
+      <button class="btn-plat" id="btn-suppr-import" type="button">Supprimer cette partition</button>`;
+  }
   if (liste === 'morceau'){
     const air = it.type === 'air';
     const structure = c.sections.filter(s => s.nom).map(s => `<li><b>${s.nom}</b> · ${Math.round((s.fin - s.debut) / c.beats)} mesures${s.fois > 1 ? ` (joué ${s.fois} fois)` : ''}</li>`).join('');
     return `<h2>${it.titre}</h2><p class="muted">${it.artiste}, ${it.annee}</p>
       ${badges(`Niveau ${it.niveau}`, `${it.sig} · ${it.tempo} BPM`, it.armure ? `Tonalité ${it.armure}` : 'Do majeur', air ? 'Mélodie' : 'Accords et basse')}
       <p>${it.desc}</p>${CONSEIL(it.astuce)}
-      ${air ? '' : `<p class="muted small">Ce n'est pas la mélodie du morceau : ce sont ses <b>accords et sa basse</b>, simplifiés, pour accompagner ou chanter par-dessus l'enregistrement.${it.aVerifier ? ' <b>À vérifier à l\'oreille</b> : dis-moi si une note sonne faux.' : ''}</p>`}
+      ${air ? '' : `<p class="muted small">Ce n'est pas la mélodie du morceau : ce sont ses <b>accords et sa basse</b>, simplifiés, pour accompagner ou chanter par-dessus l'enregistrement.${it.aVerifier ? ' Toute la chanson est là, partie par partie. <b>À vérifier à l\'oreille</b> : le nombre de passages de chaque partie peut différer de l\'enregistrement.' : ''}</p>`}
       ${structure ? `<h3>Structure</h3><ol>${structure}</ol>` : ''}
       <p class="muted small">Choisis une partie au-dessus de la partition pour la travailler seule.</p>`;
   }
@@ -656,6 +716,14 @@ function quitterLecteur(){
   if (cur){ stopperJeu(); cur = null; }
   document.title = 'Ma Piano';
 }
+/* appli mise en arrière-plan (bouton retour d'Android, autre appli, écran verrouillé) : on arrête la lecture */
+function enArrierePlan(){
+  if (cur && cur.jeu && (cur.jeu.mode === 'demo' || cur.jeu.mode === 'tempo')){
+    stopperJeu(); cur.partition.reinitialiser(); debutCible();
+  }
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) enArrierePlan(); });
+window.addEventListener('pagehide', enArrierePlan);
 function basculerLecture(){
   if (!cur) return;
   if (cur.jeu.mode){ stopperJeu(); cur.partition.reinitialiser(); debutCible(); }
@@ -776,6 +844,14 @@ function annoncer(texte){
   clearTimeout(minuterieToast);
   minuterieToast = setTimeout(() => { t.hidden = true; }, 1800);
 }
+$('#aide-corps').addEventListener('click', e => {
+  if (e.target.id !== 'btn-suppr-import' || !cur) return;
+  if (!confirm(`Supprimer « ${cur.item.titre} » de cet appareil ?`)) return;
+  const id = cur.item.id;
+  fermerVolets(false);
+  location.hash = '#/morceaux/perso';
+  supprimerImport(id);
+});
 $('#aide-corps').addEventListener('change', e => {
   if (e.target.id === 'chk-faite' && cur){ P.marquer(cur.item.id, e.target.checked); majStatutBoutons(); }
 });

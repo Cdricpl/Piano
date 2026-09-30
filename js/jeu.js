@@ -5,7 +5,7 @@
  * Les notes jouées arrivent de deux façons : le micro (attaques détectées par ecoute.js) ou les
  * touches de l'écran. Les deux se traitent pareil. */
 import { Analyseur } from './ecoute.js';
-import { jouerNote, clic, contexte, reprendreAudio } from './son.js';
+import { jouerNote, clic, contexte, couperGroupe, horlogeLisse } from './son.js';
 
 const pc = m => ((m % 12) + 12) % 12;
 
@@ -161,6 +161,8 @@ export class Jeu {
   temps(){ return this.mode === 'tempo' ? this.horloge() - this.t0 + this.debutBeat * (60 / this.bpm) : 0; }
   /* temps courant, en noires, dans le morceau */
   beat(){ return (this.horloge() - this.t0) * this.bpm / 60 + this.debutBeat; }
+  /* même chose, sur l'horloge lissée : pour l'affichage */
+  beatVu(){ return (horlogeLisse() - this.t0) * this.bpm / 60 + this.debutBeat; }
 
   tick(){
     if (!this.enCours) return;
@@ -181,7 +183,7 @@ export class Jeu {
       this.nClics++;
     }
     const b = this.beat();
-    this.r.position && this.r.position(b);
+    this.r.position && this.r.position(Math.max(this.debutBeat, this.beatVu()));   // pendant le décompte : on reste sur la 1re note
     if (b >= 0 && this.compte) { this.compte = 0; this.r.compte && this.r.compte(0); }
     // étapes dépassées sans être jouées
     const fen = this.fenetre();
@@ -265,15 +267,24 @@ export class Jeu {
     this.demoT0 = t0; this.demoBpm = bpm; this.demoDebut = debutBeat;
     const [a, b] = this.plageEtapes(debutBeat, finBeat);
     this.fin = b;
-    for (const e of this.m.etapes.slice(a, b)){
-      for (const n of e.notes) jouerNote(n.midi, { duree:Math.max(0.2, n.d * spb * 0.95), force:n.main === 'G' ? 0.7 : 0.85, quand:t0 + (e.t - debutBeat) * spb });
-    }
     this.enCours = true;
-    let dernier = -1;
+    // les notes sont confiées au son un peu à l'avance seulement (0,4 s) : un arrêt coupe tout de suite
+    let aJouer = a, dernier = -1;
+    const planifier = () => {
+      const horizon = ctx.currentTime + 0.4;
+      while (aJouer < b){
+        const e = this.m.etapes[aJouer];
+        const quand = t0 + (e.t - debutBeat) * spb;
+        if (quand > horizon) break;
+        for (const n of e.notes) jouerNote(n.midi, { duree:Math.max(0.2, n.d * spb * 0.95), force:n.main === 'G' ? 0.7 : 0.85, quand, groupe:'demo' });
+        aJouer++;
+      }
+    };
     const boucle = () => {
       if (!this.enCours || this.mode !== 'demo') return;
-      const b2 = (ctx.currentTime - t0) / spb + debutBeat;
-      this.r.position && this.r.position(b2);
+      planifier();
+      const b2 = (horlogeLisse() - t0) / spb + debutBeat;
+      this.r.position && this.r.position(Math.max(debutBeat, b2));
       let i = a;
       while (i < b && this.m.etapes[i].t <= b2 + 1e-6) i++;
       i = Math.max(a, i - 1);
@@ -281,11 +292,14 @@ export class Jeu {
       if (b2 > finBeat + 0.4){ this.terminer(); return; }
       this.raf = requestAnimationFrame(boucle);
     };
+    // quand l'onglet est caché, requestAnimationFrame s'arrête : une minuterie continue de planifier
+    this.minuterieDemo = setInterval(() => { if (this.enCours && this.mode === 'demo') planifier(); }, 200);
     boucle();
   }
 
   terminer(){
     const m = this.mode;
+    clearInterval(this.minuterieDemo);
     const bilan = m === 'tempo' ? this.bilanTempo() : m === 'attente' ? { justes:this.justes, erreurs:this.erreurs } : {};
     this.enCours = false;
     cancelAnimationFrame(this.raf);
@@ -293,6 +307,8 @@ export class Jeu {
     this.r.fin && this.r.fin(m, bilan);
   }
   arreter(){
+    if (this.mode === 'demo') couperGroupe('demo');
+    clearInterval(this.minuterieDemo);
     this.enCours = false;
     cancelAnimationFrame(this.raf);
     this.mode = null;
