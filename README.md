@@ -5,7 +5,7 @@ pupitre, l'appli **écoute** ce que tu joues avec le micro, et te dit si c'est j
 Simply Piano. Elle marche aussi avec les touches de l'écran, sans micro. Tout tourne dans le navigateur :
 aucun compte, aucun serveur, aucune donnée envoyée.
 
-**Lien :** <https://cdricpl.github.io/piano/> (une fois GitHub Pages activé : *Settings → Pages → branche `main`, dossier `/ (root)`*).
+**Lien :** <https://cdricpl.github.io/Piano/> (une fois GitHub Pages activé : *Settings → Pages → branche `main`, dossier `/ (root)`*).
 Sur téléphone : ouvre le lien, l'appli propose de s'installer (icône sur l'écran d'accueil, plein écran, hors connexion).
 
 ## Trois façons de jouer

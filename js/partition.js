@@ -51,7 +51,9 @@ export function creerPartition(morceau, { noms = false } = {}){
   const bande = 14;                                   // étiquette des doigts
 
   // ---- hauteurs ----
-  let y = 18 + (aDoigts('D') ? bande : 6);
+  // les noms de section (« Refrain ×2 ») prennent une ligne en haut : on la réserve
+  const aSections = morceau.sections.some(s => s.nom);
+  let y = (aSections ? 26 : 18) + (aDoigts('D') ? bande : 6);
   const margeHaut = S * Math.max(1.6, rgD ? (rgD[1] - 38) / 2 + 1.2 : 1.6);
   const solHaut = y + margeHaut;
   const solBas = solHaut + 4 * S;
@@ -138,9 +140,8 @@ export function creerPartition(morceau, { noms = false } = {}){
     if (!s.nom) continue;
     const m0 = Math.round(s.debut / beats);
     const gr = el('g', { class:'section' }, piste);
-    const t = el('text', { x:mesureX[m0] + 8, y:12, class:'sec-txt' }, gr);
+    const t = el('text', { x:mesureX[m0] + 8, y:19, class:'sec-txt' }, gr);
     t.textContent = s.nom + (s.fois > 1 ? ` ×${s.fois}` : '');
-    const w = t.getComputedTextLength ? 0 : 0;
     el('line', { x1:mesureX[m0] + 2, x2:mesureX[m0] + 2, y1:4, y2:(pasDeSol ? faHaut : solHaut) - 10, class:'sec-trait' }, gr);
   }
 
